@@ -1,0 +1,323 @@
+/* ---------------------------------- Base ---------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Dejavu Sans, Arial, Verdana, Geneva, sans-serif;
+  font-size: 2rem;
+  color: white;
+  background-color: #03020c;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* ---------------------------------- Video --------------------------------- */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------- Layout --------------------------------- */
+.player {
+  height: 100vh;
+  padding: 1rem 0;
+  /* Grid */
+  display: grid;
+  justify-content: stretch;
+  align-content: stretch;
+  grid-template-rows: 1fr 10fr 1fr;
+  grid-template-areas: "menu" "center" "controls";
+}
+
+.player__menu,
+.player__big-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player__menu {
+  grid-area: menu;
+}
+
+.player__big-controls {
+  grid-area: center;
+  font-size: 5rem;
+}
+
+.player__controls {
+  grid-area: controls;
+
+  /* Grid */
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: 1.5fr 3fr;
+  grid-column-gap: 1rem;
+  grid-row-gap: 0.3rem;
+  place-items: center; /* align-items + justify-items */
+  grid-template-areas:
+    "progress progress progress progress progress progress progress progress progress"
+    "play backward fordward volume time left empty speed menu";
+}
+
+/* --------------------------------- Module --------------------------------- */
+.player__menu > *,
+.player__big-controls > *,
+.player__controls > * {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-self: stretch;
+  align-items: center;
+  justify-self: stretch;
+}
+
+/* ---------------------------------- Menu ---------------------------------- */
+.menu__upload-file {
+  flex-grow: 2;
+  font-size: 3rem;
+  /* justify-content: space-around; */
+}
+
+.menu__title {
+  flex-grow: 5;
+  /* justify-content: center; */
+}
+
+.menu__empty {
+  flex-grow: 2;
+}
+
+/* ------------------------------ Big Controls ------------------------------ */
+.left-arrow,
+.right-arrow {
+  flex-grow: 1;
+  z-index: 11;
+}
+
+.big-play-pause {
+  flex-grow: 6;
+  z-index: 11;
+}
+
+/* -------------------------------- Controls -------------------------------- */
+.current-time {
+  grid-area: time;
+  font-size: 1.6rem;
+}
+
+.progress {
+  grid-area: progress;
+  justify-self: stretch;
+  justify-content: space-around;
+  font-size: 1.2rem;
+  padding: 0 1rem;
+}
+
+.time-left {
+  grid-area: left;
+  font-size: 1.6rem;
+}
+
+.progress__bar {
+  width: 100%;
+}
+
+.current-time {
+  justify-content: flex-end;
+}
+
+.time-left {
+  justify-content: flex-start;
+}
+
+.play-pause {
+  grid-area: play;
+}
+
+.fast-backward {
+  grid-area: backward;
+}
+
+.fast-forward {
+  grid-area: fordward;
+  transform: rotateY(180deg);
+}
+
+.volume {
+  grid-area: volume;
+  position: relative;
+}
+
+.volume-slider {
+  display: none;
+}
+
+div.speed > div {
+  display: none;
+}
+
+.speed {
+  grid-area: speed;
+  position: relative;
+}
+
+.playlist {
+  grid-area: menu;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.files-list {
+  display: none;
+  cursor: pointer;
+}
+
+/* --------------------------------- Sliders -------------------------------- */
+input[type="range"] {
+  background: linear-gradient(
+    to right,
+    #ff5733 0%,
+    #ff5733 50%,
+    #55453d 50%,
+    #55453d 100%
+  );
+  height: 6px;
+  border-radius: 5.9px;
+
+  /* transition: background 450ms ease-in; */
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+
+  background: white;
+
+  border: 0;
+  border-radius: 20px;
+
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+/* ---------------------------------- State --------------------------------- */
+i {
+  transition: all 0.2s ease-out;
+}
+.player__controls > *:hover i,
+.player__big-controls > *:hover i,
+.player__menu > *:hover i {
+  transform: scale(1.15);
+  cursor: pointer;
+}
+
+.animate-play {
+  animation: animatePlay 500ms ease-in-out 500ms alternate forwards;
+}
+
+.volume:hover .volume-slider {
+  display: flex;
+  transform: rotate(-90deg);
+  position: absolute;
+  bottom: 180%;
+  padding: 0.5rem;
+  background-color: #03020c;
+  border-radius: 0.5rem;
+}
+
+.speed:hover > .speed-slider {
+  visibility: visible;
+
+  position: absolute;
+  bottom: 100%;
+
+  background-color: #03020c;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.playlist:hover > .files-list {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 85%;
+  font-size: 1.5rem;
+  background-color: #03020c;
+  list-style: none;
+  width: max-content;
+  right: 0%;
+  border-radius: 0.5rem;
+}
+
+.left-arrow:hover > .fa-chevron-left,
+.right-arrow:hover > .fa-chevron-right {
+  visibility: visible;
+}
+
+/* ------------------------------- Visibility ------------------------------- */
+.player__menu,
+.player__big-controls,
+.player__controls {
+  visibility: hidden;
+  animation: fade-out 1s;
+}
+
+.visible {
+  visibility: visible;
+  animation: fade-in 1s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes animatePlay {
+  0% {
+    visibility: visible;
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
